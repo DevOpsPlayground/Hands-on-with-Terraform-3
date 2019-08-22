@@ -23,9 +23,9 @@ variable "aws_availability_zone" {
 }
 
 variable "additional_cidrs" {
-  description = "Additional CIDR blocks that will be allowed access to the Jenkins instance."
+  description = "Additional CIDR blocks that will be allowed access to the PG instance."
   type        = "list"
-  default     = ["127.0.0.1/32", "129.126.70.1/32"]
+  default     = ["127.0.0.1/32"]
 }
 
 variable "own_tag" {
