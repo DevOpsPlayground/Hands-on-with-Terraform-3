@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.12.0"
+  required_version = ">= 0.12.16"
 }
 
 provider "aws" {
@@ -29,25 +29,25 @@ data "aws_ami" "amazon_linux" {
 
 resource "aws_key_pair" "aws_core_keypair" {
     key_name   = "PLAYGROUND_${var.my_full_name}"
-    public_key = "${file("~/.ssh/playground.pub")}"
+    public_key = file("~/.ssh/playground.pub")
 }
 
 //Terraform resources
 
 resource "aws_instance" "aws_simple_instance" {
 
-  ami                    = "${data.aws_ami.amazon_linux.id}"
-  count                  = "${var.simple_instance_count_var}"
+  ami                    = data.aws_ami.amazon_linux.id
+  count                  = var.simple_instance_count_var
   instance_type          = "t2.micro"
-  subnet_id              = "${var.aws_subnet_id}"
+  subnet_id              = var.aws_subnet_id
   vpc_security_group_ids = ["${var.aws_default_sg_id}"]
-  key_name               = "${aws_key_pair.aws_core_keypair.key_name}"
+  key_name               = aws_key_pair.aws_core_keypair.key_name
 
   connection {
     type        = "ssh"
     user        = "ec2-user"
-    private_key = "${file("~/.ssh/playground")}"
-    host        = "${self.private_ip}"
+    private_key = file("~/.ssh/playground")
+    host        = self.private_ip
     agent       = "false"
   }
 
@@ -85,23 +85,23 @@ output "playground_url" {
 
 variable "simple_instance_count_var" {
   description = "Number of instances to create"
-  type        = "string"
+  type        = string
   default     = "1"
 }
 
 variable "aws_subnet_id" {
   description = "The id of the subnet"
-  type        = "string"
+  type        = string
 }
 
 variable "my_full_name" {
   description = "Your full name no spaces."
-  type        = "string"
+  type        = string
 }
 
 variable "aws_default_sg_id" {
   description = "The id of the default security group"
-  type        = "string"
+  type        = string
 }
 
 // Terraform Output
