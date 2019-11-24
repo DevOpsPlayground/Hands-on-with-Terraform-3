@@ -18,10 +18,10 @@ PORT="8080"
 # Install dependencies
 sudo yum install gcc-c++ git -y
 
-# Install node version 8
+# Install node version 10.11.0
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
 . ~/.bash_profile
-nvm install 8
+nvm install 10.11.0
 
 # Install yarn
 npm install -g yarn
