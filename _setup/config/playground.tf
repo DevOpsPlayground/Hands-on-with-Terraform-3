@@ -109,3 +109,8 @@ output "simple_public_ip" {
   description = "Public ip of the instance"
   value       = "${aws_instance.aws_simple_instance.*.public_ip}"
 }
+
+output "simple_private_ip" {
+  description = "Private ip of the instance"
+  value       = "${aws_instance.aws_simple_instance.*.private_ip}"
+}
