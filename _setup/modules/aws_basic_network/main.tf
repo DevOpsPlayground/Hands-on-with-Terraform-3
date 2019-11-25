@@ -1,5 +1,5 @@
 resource "aws_vpc" "aws_core_vpc" {
-  cidr_block = "${var.aws_core_vpc_cidr}" 
+  cidr_block = var.aws_core_vpc_cidr
 
   tags = {
     Name = "${var.prefix_tag}_VPC"
@@ -9,9 +9,9 @@ resource "aws_vpc" "aws_core_vpc" {
 }
 
 resource "aws_subnet" "aws_core_subnet1" {
-  vpc_id                  = "${aws_vpc.aws_core_vpc.id}"
-  cidr_block              = "${var.aws_core_subnet_cidr1}"
-  availability_zone       = "${var.aws_core_az_1}"
+  vpc_id                  = aws_vpc.aws_core_vpc.id
+  cidr_block              = var.aws_core_subnet_cidr1
+  availability_zone       = var.aws_core_az_1
   map_public_ip_on_launch = true
 
   tags = {
@@ -22,7 +22,7 @@ resource "aws_subnet" "aws_core_subnet1" {
 }
 
 resource "aws_internet_gateway" "aws_core_igw" {
-  vpc_id = "${aws_vpc.aws_core_vpc.id}"
+  vpc_id = aws_vpc.aws_core_vpc.id
 
   tags = {
     Name = "${var.prefix_tag}_IGW"
@@ -32,11 +32,11 @@ resource "aws_internet_gateway" "aws_core_igw" {
 }
 
 resource "aws_default_route_table" "aws_core_rt" {
-  default_route_table_id = "${aws_vpc.aws_core_vpc.default_route_table_id}"
+  default_route_table_id = aws_vpc.aws_core_vpc.default_route_table_id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.aws_core_igw.id}"
+    gateway_id = aws_internet_gateway.aws_core_igw.id
   }
 
   tags = {
@@ -47,7 +47,7 @@ resource "aws_default_route_table" "aws_core_rt" {
 }
 
 resource "aws_default_security_group" "aws_core_dsg" {
-  vpc_id = "${aws_vpc.aws_core_vpc.id}"
+  vpc_id = aws_vpc.aws_core_vpc.id
 
   ingress {
     protocol    = "-1"
@@ -70,7 +70,7 @@ resource "aws_default_security_group" "aws_core_dsg" {
     self        = false
     from_port   = 0
     to_port     = 0
-    cidr_blocks = "${var.additional_public_cidrs}"
+    cidr_blocks = var.additional_public_cidrs
   }
 
   egress {

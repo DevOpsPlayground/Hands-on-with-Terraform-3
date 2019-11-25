@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "${var.aws_region}"
+  region = var.aws_region
 }
 
 # Create a basic network for the environment. VPC, Subnet, Security groups, IGW etc
@@ -35,12 +35,12 @@ module "aws_iam_access_key" {
 }
 
 resource "aws_instance" "playground_instance" {
-  ami                    = "${data.aws_ami.amazon_linux.id}"
-  count                  = "${var.server_count}"
+  ami                    = data.aws_ami.amazon_linux.id
+  count                  = var.server_count
   instance_type          = "t2.medium"
-  subnet_id              = "${module.aws_basic_network.aws_subnet_id}"
+  subnet_id              = module.aws_basic_network.aws_subnet_id
   vpc_security_group_ids = ["${module.aws_basic_network.aws_default_sg_id}"]
-  key_name               = "${var.pub_key_name}"
+  key_name               = var.pub_key_name
 
   root_block_device {
     volume_size = "10"  
@@ -49,8 +49,8 @@ resource "aws_instance" "playground_instance" {
   connection {
     type        = "ssh"
     user        = "ec2-user"
-    private_key = "${file("~/.ssh/${var.private_key_file}")}"
-    host        = "${self.public_ip}"
+    private_key = file("~/.ssh/${var.private_key_file}")
+    host        = self.public_ip
   }
 
 provisioner "file" {

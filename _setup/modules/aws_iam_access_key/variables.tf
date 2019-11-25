@@ -1,4 +1,4 @@
 variable "aws_iam_user_name" {
-    type = "string"
+    type = string
     description = "Name of IAM user."
 }

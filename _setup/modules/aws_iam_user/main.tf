@@ -1,7 +1,7 @@
 resource "aws_iam_user" "iam_user" {
     
-  name = "${var.aws_iam_user_name}"
-  path = "${var.aws_iam_user_path}"
+  name = var.aws_iam_user_name
+  path = var.aws_iam_user_path
 
 
   tags = {
